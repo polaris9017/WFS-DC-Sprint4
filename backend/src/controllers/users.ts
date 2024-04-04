@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response} from 'express';
-import User from "../models/user";
+import User from "../models/users";
 import {SignUpFailedException} from "../errors/userException";
 import {StatusCodes} from "http-status-codes";
 import {DatabaseException} from "../errors/baseException";

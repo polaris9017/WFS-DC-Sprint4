@@ -1,4 +1,4 @@
-import mysql, {Pool, PoolOptions, RowDataPacket} from 'mysql2/promise';
+import mysql, {Pool, PoolOptions, ResultSetHeader, RowDataPacket} from 'mysql2/promise';
 import {DatabaseException} from "../errors/baseException";
 
 export type ConnectionConfig = PoolOptions;
@@ -38,6 +38,20 @@ class Connection {
 
         try {
             results = await (values ? conn.query(sql, values) : conn.query(sql)) as RowDataPacket[];
+        } catch (err: any) {
+            throw new DatabaseException(`DB connection error: ${err}`, err.code);
+        } finally {
+            conn.release();
+        }
+        return results;
+    }
+
+    async queryReturnHeader(sql: string, values?: any[]) {
+        const conn = await this.connection.getConnection();
+        let results: ResultSetHeader;
+
+        try {
+            [results] = await (values ? conn.query<ResultSetHeader>(sql, values) : conn.query<ResultSetHeader>(sql));
         } catch (err: any) {
             throw new DatabaseException(`DB connection error: ${err}`, err.code);
         } finally {

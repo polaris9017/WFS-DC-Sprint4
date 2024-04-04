@@ -17,8 +17,8 @@ const comparePassword = async (password: string, hash: string) => bcrypt.compare
 const signIn = async (email: string, password: string) => {
     const [user] = await connection.query('SELECT * FROM users WHERE email = ?', [email]);
 
-    if(user && await comparePassword(password, user.encrypted_password)) {
-        const payload = { id: user.id, email: user.email };
+    if (user && await comparePassword(password, user.encrypted_password)) {
+        const payload = {id: user.id, email: user.email};
         return jwt.sign(payload, JWT_SECRET!, {expiresIn: TOKEN_EXPIRES_IN});
     }
 
