@@ -6,7 +6,7 @@ import {UserTokenPayload} from "../controllers/users";
 
 declare module 'express-serve-static-core' {
     interface Request {
-        user: UserTokenPayload;
+        user?: UserTokenPayload;
     }
 }
 

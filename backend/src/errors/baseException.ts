@@ -1,9 +1,17 @@
 import {StatusCodes} from 'http-status-codes';
 
 class BaseException extends Error {
+    private _statusCode: StatusCodes;
+
     constructor(msg: string, statusCode: StatusCodes) {
-        super(`[Error] ${msg} [status: ${statusCode}]`);
+        super(`${msg} [status: ${statusCode}]`);
         this.name = this.constructor.name;
+        this._statusCode = statusCode;
+    }
+
+
+    get statusCode(): StatusCodes {
+        return this._statusCode;
     }
 }
 
