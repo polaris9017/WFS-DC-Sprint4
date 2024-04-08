@@ -4,9 +4,9 @@ import {authenticateUser} from "../middlewares/authentication";
 
 const router = express.Router();
 
-router.post('/login', signIn);
-router.post('/users', signUp);
-router.get('/users/me',authenticateUser, getUserDetail);
-router.post('/logout', signOut);
+router.post('/login', authenticateUser, signIn);
+router.post('/users', authenticateUser, signUp);
+router.get('/users/me', authenticateUser, authenticateUser, getUserDetail);
+router.post('/logout', authenticateUser, signOut);
 
 export default router;

@@ -1,12 +1,14 @@
 import express, {NextFunction, Request, Response} from 'express';
 import "express-async-errors";
 import cors from 'cors';
+import cookieParser from "cookie-parser";
 import {StatusCodes} from 'http-status-codes';
 import {CORS_ALLOWED_ORIGIN} from "./settings";
 import users from './routes/users';
 import notes from "./routes/notes";
 import healthcheck from "./routes/healthcheck";
 import {InternalServerException} from "./errors/userException";
+import exceptionHandler from "./middlewares/exceptionHandler";
 
 const app = express();
 
@@ -18,11 +20,8 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
-
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send('Something went wrong!');
-    throw new InternalServerException();
-});
+app.use(cookieParser());
+app.use(exceptionHandler);
 
 // Add router
 app.use('/api', users);
