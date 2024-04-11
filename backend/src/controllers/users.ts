@@ -17,6 +17,7 @@ export const signIn = async (req: Request, res: Response, next: NextFunction) =>
     try {
         token = await User.signIn(email, password);
     } catch (err) {
+        res.status(StatusCodes.UNAUTHORIZED).send({message: 'Cannot login to system'});
         throw new SignUpFailedException();
     }
 
@@ -36,7 +37,7 @@ export const signUp = async (req: Request, res: Response, next: NextFunction) =>
         await User.signUp(email, password);
     } catch (err) {
         if (err instanceof DatabaseException && err.code === 'ER_DUP_ENTRY') {
-            res.status(StatusCodes.CONFLICT).send('User already exists.');
+            res.status(StatusCodes.CONFLICT).json({message: 'User already exists.'});
         }
         throw new SignUpFailedException();
     }
